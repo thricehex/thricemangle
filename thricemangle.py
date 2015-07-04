@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 __author__ = 'thricehex'
-__version__ = '6.30.15'
+__version__ = '7.3.15'
 
 # Script for generating password wordlists by mangling keywords, numbers,
 #  or existing wordlists into common password structures.
 
 # Author: Garrett Smith(ThriceHex)
-# Version: 6.30.15
+# Version: 7.3.15
 
 import argparse
 import os
@@ -16,7 +16,8 @@ descript = 'Generate password wordlists by mangling keywords, numbers, or existi
 default_dict = 'http://www.mieliestronk.com/corncob_lowercase.txt'
 alphas = list()
 nums = ['1','12','123','1234','12345','123456', '1234567', '21', '321', '4321' ,'54321', '654321' ,'7654321']
-specials = ['!', '!!', '!!!', '?', '??', '???', '@', '$', '$$', '$$$']
+specials = ['!', '!!', '!!!', '?', '??', '???', '$', '$$', '$$$', '@', '#', '%', '^', '&', '*', '~']
+specials_2 = ['!', '!!', '?', '??']
 leet_equivs = {'a':'4', 'b':'6', 'e':'3', 't':'7', 'i':'1', 's':'5'}
 leet_equivs_2 = {'i':'!', 's':'$'}
 results = list()
@@ -39,7 +40,7 @@ parser.add_argument('--no_specials', help='Do not use symbols in password genera
 args = parser.parse_args()
 output = args.output
 win_term = args.win_terminate
-keywords = args.keywords.split(',') if args.keywords is not None else None
+keywords = args.keywords.split(',') if args.keywords is not None else list()
 keynums = args.keynums.split(',') if args.keynums is not None else None
 dict_range = int(args.dict_range) if args.dict_range is not None else None
 num_range = args.num_range
@@ -76,8 +77,8 @@ if dict_file:
                 break
 
 # Add words to keyword list immediately if no_modify is not specified
-    if not no_modify:
-        alphas.extend(file_list)
+    if not no_modify and not cap_only:
+        keywords.extend(file_list)
 
     dfile.flush()
     dfile.close()
@@ -154,7 +155,8 @@ for sequence in alphas:
             for sym in specials:
                 results.append(seq_num + sym)
 
-print('Generated Passwords: ' + str(len(results)))
+if not output:
+    print('[+] {0} passwords generated.'.format(len(results)))
 
 # Write to file if output given with standard \n line terminations of \r\n Windows terminations
 if output:
@@ -165,5 +167,6 @@ if output:
     else:
         for pw in results:
             out.write(pw + '\r\n')
+    print('[+] {0} password written to {1}'.format(len(results), os.path.abspath(output)))
     out.flush()
     out.close()
