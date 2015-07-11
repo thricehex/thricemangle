@@ -153,6 +153,7 @@ for sequence in alphas:
         results.append(seq_num)
         if not no_special:
             for sym in specials:
+                results.append(sequence + sym)
                 results.append(seq_num + sym)
 
 if not output:
