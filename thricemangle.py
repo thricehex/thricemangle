@@ -12,11 +12,6 @@ import argparse
 import os
 import subprocess
 
-
-# TODO
-# Add social network skimming feature or integrate module from existing one
-# Add config file parsing support
-# Add additional features such as dates, alpha-only permutations, etc.
 descript = 'Generate password wordlists by mangling keywords, numbers, or existing wordlists into common password structures.'
 default_dict = 'http://www.mieliestronk.com/corncob_lowercase.txt'
 alphas = list()
